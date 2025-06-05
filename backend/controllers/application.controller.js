@@ -1,7 +1,5 @@
-import { createRef, use } from "react";
-import { Application } from "../models/application.model";
-import { Job } from "../models/job.model";
-import { application } from "express";
+import { Application } from "../models/application.model.js";
+import { Job } from "../models/job.model.js";
 
 export const applyJob = async (req, res) => {
   try {
@@ -137,6 +135,5 @@ export const updateStatus = async(req,res) =>{
         })
     } catch (error) {
         console.log(error);
-        
     }
 }
