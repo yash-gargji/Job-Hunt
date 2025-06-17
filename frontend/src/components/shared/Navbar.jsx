@@ -6,7 +6,7 @@ import { Button } from "../ui/button";
 import { User, LogOut } from "lucide-react";
 
 function Navbar() {
-  const user = true;
+  const user = false;
   return (
     <div className="bg-white">
       <div className="flex items-center justify-between mx-auto max-w-7xl h-16">
