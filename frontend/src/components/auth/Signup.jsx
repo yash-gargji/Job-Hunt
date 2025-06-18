@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "../shared/Navbar.jsx";
 import { Label } from "../ui/label.jsx";
 import { Input } from "../ui/input.jsx";
@@ -8,11 +8,35 @@ import { Link } from "react-router-dom";
 import { FiUser, FiMail, FiPhone, FiLock, FiImage } from "react-icons/fi";
 
 function Signup() {
+  const [input, setInput] = useState({
+    fullname: "",
+    email: "",
+    phoneNumber: "",
+    password: "",
+    role: "",
+    file: "",
+  });
+
+  const changeEventHandler = (e) => {
+    setInput({ ...input, [e.target.name]: e.target.value });
+  };
+
+  const changeFileHandler = (e) => {
+    setInput({ ...input, file: e.target.files?.[0] });
+  };
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-blue-100 to-purple-200 flex flex-col">
       <Navbar />
       <div className="flex flex-1 items-center justify-center">
-        <form className="w-full max-w-md bg-white/90 shadow-2xl rounded-3xl p-8 space-y-5 border border-indigo-100 animate-fadeIn">
+        <form
+          className="w-full max-w-md bg-white/90 shadow-2xl rounded-3xl p-8 space-y-5 border border-indigo-100 animate-fadeIn"
+          onSubmit={submitHandler}
+        >
           <h1 className="font-extrabold text-3xl text-indigo-700 text-center mb-2 tracking-tight">
             <span className="bg-gradient-to-r from-indigo-500 to-blue-400 bg-clip-text text-transparent">
               Sign Up
@@ -27,6 +51,9 @@ function Signup() {
               type="text"
               placeholder="Full Name"
               className="w-full pl-10 pr-3 py-2 rounded-xl border border-gray-200 bg-gray-50 focus:ring-2 focus:ring-indigo-300 transition"
+              name="fullname"
+              value={input.fullname}
+              onChange={changeEventHandler}
             />
           </div>
           <div className="relative">
@@ -35,6 +62,9 @@ function Signup() {
               type="email"
               placeholder="Email"
               className="w-full pl-10 pr-3 py-2 rounded-xl border border-gray-200 bg-gray-50 focus:ring-2 focus:ring-indigo-300 transition"
+              name="email"
+              value={input.email}
+              onChange={changeEventHandler}
             />
           </div>
           <div className="relative">
@@ -43,6 +73,9 @@ function Signup() {
               type="text"
               placeholder="Phone Number"
               className="w-full pl-10 pr-3 py-2 rounded-xl border border-gray-200 bg-gray-50 focus:ring-2 focus:ring-indigo-300 transition"
+              name="phoneNumber"
+              value={input.phoneNumber}
+              onChange={changeEventHandler}
             />
           </div>
           <div className="relative">
@@ -51,6 +84,9 @@ function Signup() {
               type="password"
               placeholder="Password"
               className="w-full pl-10 pr-3 py-2 rounded-xl border border-gray-200 bg-gray-50 focus:ring-2 focus:ring-indigo-300 transition"
+              name="password"
+              value={input.password}
+              onChange={changeEventHandler}
             />
           </div>
           <div>
@@ -64,6 +100,8 @@ function Signup() {
                   name="role"
                   value="student"
                   className="accent-indigo-600"
+                  checked={input.role === "student"}
+                  onChange={changeEventHandler}
                 />
                 <Label className="text-gray-600 text-sm">Student</Label>
               </div>
@@ -73,6 +111,8 @@ function Signup() {
                   name="role"
                   value="recruiter"
                   className="accent-indigo-600"
+                  checked={input.role === "recruiter"}
+                  onChange={changeEventHandler}
                 />
                 <Label className="text-gray-600 text-sm">Recruiter</Label>
               </div>
@@ -84,6 +124,7 @@ function Signup() {
               accept="image/*"
               type="file"
               className="block w-full pl-10 text-sm py-2 rounded-xl border border-gray-200 bg-gray-50 file:bg-indigo-50 file:text-indigo-700 file:rounded-lg file:py-2 file:px-4"
+              onChange={changeFileHandler}
             />
           </div>
           <Button
