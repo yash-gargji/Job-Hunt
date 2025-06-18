@@ -2,81 +2,105 @@ import React from "react";
 import Navbar from "../shared/Navbar.jsx";
 import { Label } from "../ui/label.jsx";
 import { Input } from "../ui/input.jsx";
-import { RadioGroup, RadioGroupItem } from "../ui/radio-group.jsx";
+import { RadioGroup } from "../ui/radio-group.jsx";
 import { Button } from "../ui/button.jsx";
 import { Link } from "react-router-dom";
-
+import { FiUser, FiMail, FiPhone, FiLock, FiImage } from "react-icons/fi";
 
 function Signup() {
   return (
-    <div>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-blue-100 to-purple-200 flex flex-col">
       <Navbar />
-      <div className="flex items-center justify-center max-w-7xl mx-auto">
-        <form
-          action=""
-          className="w-1/2 border border-gray-200 rounded-md p-4 my-10"
-        >
-          <h1 className="font-bold text-xl mb-5">Sign Up</h1>
-          <div className="my-2">
-            <Label> Full Name</Label>
-            <Input type="text" placeholder="Type your name here" />
+      <div className="flex flex-1 items-center justify-center">
+        <form className="w-full max-w-md bg-white/90 shadow-2xl rounded-3xl p-8 space-y-5 border border-indigo-100 animate-fadeIn">
+          <h1 className="font-extrabold text-3xl text-indigo-700 text-center mb-2 tracking-tight">
+            <span className="bg-gradient-to-r from-indigo-500 to-blue-400 bg-clip-text text-transparent">
+              Sign Up
+            </span>
+          </h1>
+          <p className="text-center text-gray-500 mb-3">
+            Join our community and unlock new opportunities!
+          </p>
+          <div className="relative">
+            <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400" />
+            <Input
+              type="text"
+              placeholder="Full Name"
+              className="w-full pl-10 pr-3 py-2 rounded-xl border border-gray-200 bg-gray-50 focus:ring-2 focus:ring-indigo-300 transition"
+            />
           </div>
-          <div className="my-2">
-            <Label> Email</Label>
-            <Input type="email" placeholder="xyz@gmail.com" />
+          <div className="relative">
+            <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400" />
+            <Input
+              type="email"
+              placeholder="Email"
+              className="w-full pl-10 pr-3 py-2 rounded-xl border border-gray-200 bg-gray-50 focus:ring-2 focus:ring-indigo-300 transition"
+            />
           </div>
-          <div className="my-2">
-            <Label>Phone Number</Label>
-            <Input type="text" name="phoneNumber" placeholder="8080808080" />
+          <div className="relative">
+            <FiPhone className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400" />
+            <Input
+              type="text"
+              placeholder="Phone Number"
+              className="w-full pl-10 pr-3 py-2 rounded-xl border border-gray-200 bg-gray-50 focus:ring-2 focus:ring-indigo-300 transition"
+            />
           </div>
-          <div className="my-2">
-            <Label>Password</Label>
-            <Input type="password" placeholder="xyz@gmail.com" />
+          <div className="relative">
+            <FiLock className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400" />
+            <Input
+              type="password"
+              placeholder="Password"
+              className="w-full pl-10 pr-3 py-2 rounded-xl border border-gray-200 bg-gray-50 focus:ring-2 focus:ring-indigo-300 transition"
+            />
           </div>
           <div>
-            <RadioGroup className="flex items-center gap-4 my-5">
+            <Label className="block mb-1 text-sm text-gray-700 font-semibold">
+              Role
+            </Label>
+            <RadioGroup className="flex gap-6">
               <div className="flex items-center space-x-2">
                 <Input
                   type="radio"
                   name="role"
                   value="student"
-                  // checked={input.role === "student"}
-                  // onChange={changeEventHandler}
-                  className="cursor-pointer"
+                  className="accent-indigo-600"
                 />
-                <Label htmlFor="r1">Student</Label>
+                <Label className="text-gray-600 text-sm">Student</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <Input
                   type="radio"
                   name="role"
                   value="recruiter"
-                  // checked={input.role === "recruiter"}
-                  // onChange={changeEventHandler}
-                  className="cursor-pointer"
+                  className="accent-indigo-600"
                 />
-                <Label htmlFor="r2">Recruiter</Label>
+                <Label className="text-gray-600 text-sm">Recruiter</Label>
               </div>
             </RadioGroup>
-            <div className="flex items-center gap-2">
-              <Label>Profile</Label>
-              <Input
-                accept="image/*"
-                type="file"
-                // onChange={changeFileHandler}
-                className="cursor-pointer"
-              />
-            </div>
           </div>
-          <Button type="submit" className="w-full my-4">
-            Signup
+          <div className="relative">
+            <FiImage className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400" />
+            <Input
+              accept="image/*"
+              type="file"
+              className="block w-full pl-10 text-sm py-2 rounded-xl border border-gray-200 bg-gray-50 file:bg-indigo-50 file:text-indigo-700 file:rounded-lg file:py-2 file:px-4"
+            />
+          </div>
+          <Button
+            type="submit"
+            className="w-full py-3 mt-2 rounded-xl bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-bold text-lg shadow-lg hover:scale-105 hover:from-indigo-600 hover:to-blue-600 transition-all duration-200"
+          >
+            Sign Up
           </Button>
-          <span className="text-sm">
+          <div className="text-center text-gray-500 text-sm">
             Already have an account?{" "}
-            <Link to="/login" className="text-blue-600">
+            <Link
+              to="/login"
+              className="text-indigo-600 font-semibold hover:underline"
+            >
               Login
             </Link>
-          </span>
+          </div>
         </form>
       </div>
     </div>
