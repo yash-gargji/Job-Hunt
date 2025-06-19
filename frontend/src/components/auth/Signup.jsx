@@ -9,6 +9,9 @@ import { FiUser, FiMail, FiPhone, FiLock, FiImage } from "react-icons/fi";
 import axios from "axios";
 import { USER_API_END_POINT } from "@/utils/constants.js";
 import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoading } from "@/redux/authSlice.js";
 
 function Signup() {
   const [input, setInput] = useState({
@@ -19,7 +22,9 @@ function Signup() {
     role: "",
     file: "",
   });
+  const {loading} = useSelector(store => store.auth);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
@@ -41,6 +46,7 @@ function Signup() {
       formData.append("file", input.file);
     }
     try {
+       dispatch(setLoading(true));
       const res = await axios.post(`${USER_API_END_POINT}/register`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -62,6 +68,9 @@ function Signup() {
       } else {
         toast.error("An unexpected error occurred.");
       }
+    }
+    finally{
+      dispatch(setLoading(false));
     }
   };
 
@@ -163,12 +172,16 @@ function Signup() {
               onChange={changeFileHandler}
             />
           </div>
-          <Button
-            type="submit"
-            className="w-full py-3 mt-2 rounded-xl bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-bold text-lg shadow-lg hover:scale-105 hover:from-indigo-600 hover:to-blue-600 transition-all duration-200"
-          >
-            Sign Up
-          </Button>
+          {loading ? (
+            <Button className="w-full my-4">
+              {" "}
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait{" "}
+            </Button>
+          ) : (
+            <Button type="submit" className="w-full my-4">
+              Signup
+            </Button>
+          )}
           <div className="text-center text-gray-500 text-sm">
             Already have an account?{" "}
             <Link
