@@ -4,8 +4,11 @@ import { Label } from "../ui/label.jsx";
 import { Input } from "../ui/input.jsx";
 import { RadioGroup } from "../ui/radio-group.jsx";
 import { Button } from "../ui/button.jsx";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FiMail, FiLock } from "react-icons/fi";
+import { toast } from "sonner";
+import axios from "axios";
+import { USER_API_END_POINT } from "@/utils/constants.js";
 
 function Login() {
   const [input, setInput] = useState({
@@ -13,6 +16,7 @@ function Login() {
     password: "",
     role: "",
   });
+  const navigate = useNavigate();
 
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
@@ -20,8 +24,30 @@ function Login() {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    console.log(input);
-    
+
+    try {
+      const res = await axios.post(`${USER_API_END_POINT}/login`, input, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+      if (res.data.success) {
+        navigate("/");
+        toast.success(res.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("An unexpected error occurred.");
+      }
+    }
   };
 
   return (
