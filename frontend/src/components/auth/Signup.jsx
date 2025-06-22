@@ -64,6 +64,7 @@ function Signup() {
         error.response.data &&
         error.response.data.message
       ) {
+        console.log(error.response.data.errors)
         toast.error(error.response.data.message);
       } else {
         toast.error("An unexpected error occurred.");

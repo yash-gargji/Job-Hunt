@@ -2,13 +2,63 @@ import { User } from "../models/user.model.js";
 import bcrypt, { hash } from "bcryptjs";
 import jwt from "jsonwebtoken";
 
+// Regular expressions
+const nameRegex = /^[a-zA-Z\s]+$/;
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const phoneRegex = /^\d{10}$/;
+const passwordRegex = /^.{6,}$/; // At least 6 characters
+const roleRegex = /^(student|recruiter)$/; // Example roles
+
 export const register = async (req, res) => {
   try {
     const { fullname, email, phoneNumber, password, role } = req.body;
-    if (!fullname || !email || !phoneNumber || !password || !role) {
+
+    const errors = [];
+
+    // Check presence
+    if (!fullname)
+      errors.push({ field: "fullname", message: "Full name is required" });
+    else if (!nameRegex.test(fullname))
+      errors.push({
+        field: "fullname",
+        message: "Full name should contain only letters and spaces",
+      });
+
+    if (!email) errors.push({ field: "email", message: "Email is required" });
+    else if (!emailRegex.test(email))
+      errors.push({ field: "email", message: "Invalid email format" });
+
+    if (!phoneNumber)
+      errors.push({
+        field: "phoneNumber",
+        message: "Phone number is required",
+      });
+    else if (!phoneRegex.test(phoneNumber))
+      errors.push({
+        field: "phoneNumber",
+        message: "Phone number must be a 10-digit number",
+      });
+
+    if (!password)
+      errors.push({ field: "password", message: "Password is required" });
+    else if (!passwordRegex.test(password))
+      errors.push({
+        field: "password",
+        message: "Password must be at least 6 characters long",
+      });
+
+    if (!role) errors.push({ field: "role", message: "Role is required" });
+    else if (!roleRegex.test(role))
+      errors.push({
+        field: "role",
+        message: "Role must be either 'user' or 'admin'",
+      });
+
+    if (errors.length > 0) {
       return res.status(400).json({
-        message: "All fields are mandatory",
+        message: "Validation failed",
         success: false,
+        errors,
       });
     }
     const user = await User.findOne({ email });
