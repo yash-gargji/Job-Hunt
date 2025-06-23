@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 
 const AppliedJobTable = () => {
     // const {allAppliedJobs} = useSelector(store=>store.job);
-    const allAppliedJobs = {};
+    const allAppliedJobs = [];
     return (
         <div>
             <Table>

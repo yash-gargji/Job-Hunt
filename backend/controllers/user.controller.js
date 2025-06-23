@@ -1,6 +1,8 @@
 import { User } from "../models/user.model.js";
 import bcrypt, { hash } from "bcryptjs";
 import jwt from "jsonwebtoken";
+import getDataUri from "../utils/dataUri.js";
+import cloudinary from "../utils/cloudinary.js";
 
 // Regular expressions
 const nameRegex = /^[a-zA-Z\s]+$/;
@@ -12,10 +14,10 @@ const roleRegex = /^(student|recruiter)$/; // Example roles
 export const register = async (req, res) => {
   try {
     const { fullname, email, phoneNumber, password, role } = req.body;
+    const file = req.file;
 
     const errors = [];
 
-    // Check presence
     if (!fullname)
       errors.push({ field: "fullname", message: "Full name is required" });
     else if (!nameRegex.test(fullname))
@@ -69,6 +71,13 @@ export const register = async (req, res) => {
       });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
+    let profilePhoto = "";
+
+    if(file){
+        const fileUri = getDataUri(file);
+        const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+        profilePhoto = cloudResponse.secure_url;
+    }
 
     await User.create({
       fullname,
@@ -76,6 +85,9 @@ export const register = async (req, res) => {
       phoneNumber,
       password: hashedPassword,
       role,
+      profile: {
+         profilePhoto: profilePhoto,
+      }
     });
     return res.status(201).json({
       message: "Account created successfully.",
@@ -164,10 +176,43 @@ export const updateProfile = async (req, res) => {
   try {
     const { fullname, email, phoneNumber, bio, skills } = req.body;
     const file = req.file;
-    let skillsArray;
-    if (skills) skillsArray = skills.split(",");
 
-    const userId = req.id; // midlleware authentication
+    if (!fullname || fullname.trim() === "")
+      return res.status(400).json({
+        message: "Full name must not be empty",
+        success: false,
+      });
+    else if (!nameRegex.test(fullname))
+      return res.status(400).json({
+        success: false,
+        message: "Full name should contain only letters and spaces",
+      });
+
+    if (!email || email.trim() === "")
+      return res.status(400).json({
+        message: "Email must not be empty",
+        success: false,
+      });
+    else if (!emailRegex.test(email))
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid email format" });
+
+    if (!phoneNumber)
+      return res.status(400).json({
+        message: "Phone number is required",
+        success: false,
+      });
+    else if (!phoneRegex.test(phoneNumber))
+      res.status(400).json({
+        success: "phoneNumber",
+        message: "Phone number must be a 10-digit number",
+      });
+    let skillsArray = [];
+    if (skills) skillsArray = skills.split(",");
+    
+
+    const userId = req.id; 
     let user = await User.findById(userId);
 
     if (!user) {
@@ -176,13 +221,18 @@ export const updateProfile = async (req, res) => {
         success: false,
       });
     }
-    // updating data
+    if(file){
+        const fileUri = getDataUri(file);
+        const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+        user.profile.resume = cloudResponse.secure_url;
+        user.profile.resumeOriginalName = file.originalname;
+    }
 
-    if (fullname) user.fullname = fullname;
-    if (email) user.email = email;
-    if (phoneNumber) user.phoneNumber = phoneNumber;
-    if (bio) user.profile.bio = bio;
-    if (skills) user.profile.skills = skillsArray;
+    user.fullname = fullname;
+    user.email = email;
+    user.phoneNumber = phoneNumber;
+    user.profile.bio = bio;
+    user.profile.skills = skillsArray;
 
     await user.save();
 
