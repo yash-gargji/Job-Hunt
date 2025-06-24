@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
@@ -15,21 +15,20 @@ function Navbar() {
   const navigate = useNavigate();
 
   const logoutHandler = async () => {
-      try {
-         const res = axios.get(`${USER_API_END_POINT}/logout`, {
-            withCredentials: true
-         })
-         if((await res).data.success){
-            dispatch(setUser(null));
-            navigate('/');
-            toast.success("logged out successfully");
-         }
-      } catch (error) {
-          console.log(error);
-          toast.error(error.response.data.message);
+    try {
+      const res = axios.get(`${USER_API_END_POINT}/logout`, {
+        withCredentials: true,
+      });
+      if ((await res).data.success) {
+        dispatch(setUser(null));
+        navigate("/");
+        toast.success("logged out successfully");
       }
-  }
-  
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    }
+  };
 
   return (
     <div className="bg-white">
@@ -43,13 +42,41 @@ function Navbar() {
         <div className="flex items-center gap-12">
           <ul className="flex font-medium items-center gap-5">
             <li>
-              <Link to="/">Home</Link>
+              <NavLink
+                to="/"
+                end
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-black font-bold transition-colors"
+                    : "text-gray-700 hover:text-black transition-colors"
+                }
+              >
+                Home
+              </NavLink>
             </li>
             <li>
-              <Link to="/jobs">Jobs</Link>
+              <NavLink
+                to="/jobs"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-black font-bold transition-colors"
+                    : "text-gray-700 hover:text-black transition-colors"
+                }
+              >
+                Jobs
+              </NavLink>
             </li>
             <li>
-              <Link to="/browse">Browse</Link>
+              <NavLink
+                to="/browse"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-black font-bold transition-colors"
+                    : "text-gray-700 hover:text-black transition-colors"
+                }
+              >
+                Browse
+              </NavLink>
             </li>
           </ul>
           {!user ? (
@@ -67,14 +94,18 @@ function Navbar() {
             <Popover>
               <PopoverTrigger asChild>
                 <Avatar className="cursor-pointer">
-                  <AvatarImage src={user?.profile?.profilePhoto || "/altProfile.jpg"} />
+                  <AvatarImage
+                    src={user?.profile?.profilePhoto || "/altProfile.jpg"}
+                  />
                 </Avatar>
               </PopoverTrigger>
               <PopoverContent className="w-80">
                 <div className="w-80 bg-gradient-to-br from-white via-gray-50 to-blue-50 rounded-2xl shadow-2xl p-6 flex flex-col items-center gap-5 border border-gray-100">
                   <div className="relative">
                     <Avatar className="cursor-pointer ring-4 ring-blue-200 ring-offset-2 shadow-lg">
-                      <AvatarImage src={user?.profile?.profilePhoto || "/altProfile.jpg"} />
+                      <AvatarImage
+                        src={user?.profile?.profilePhoto || "/altProfile.jpg"}
+                      />
                     </Avatar>
                     <span className="absolute bottom-0 right-0 w-4 h-4 bg-green-400 border-2 border-white rounded-full shadow"></span>
                   </div>
@@ -95,8 +126,8 @@ function Navbar() {
                       <Link to="/profile">View Profile</Link>
                     </Button>
                     <Button
-                      onClick = {logoutHandler}
-                      variant= "outline"
+                      onClick={logoutHandler}
+                      variant="outline"
                       className="flex items-center gap-3 text-base font-medium text-red-600 hover:bg-red-100 rounded-lg px-3 py-2 transition-all duration-200"
                     >
                       <LogOut size={20} className="text-red-500" />

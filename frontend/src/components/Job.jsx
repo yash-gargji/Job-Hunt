@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 
 const Job = ({job}) => {
     const navigate = useNavigate();
-    const id = "012413kdcf";
+    const id = job?._id;
     const daysAgoFunction = (mongodbTime) => {
         const createdAt = new Date(mongodbTime);
         const currentTime = new Date();
@@ -25,7 +25,7 @@ const Job = ({job}) => {
             <div className='flex items-center gap-2 my-2'>
                 <Button className="p-6" variant="outline" size="icon">
                     <Avatar>
-                        <AvatarImage src={job?.company?.logo || "https://img.freepik.com/free-vector/gradient-hub-logo-template_23-2149847142.jpg?semt=ais_hybrid&w=740" } />
+                        <AvatarImage src={job?.company?.logo || "/altCompany.avif" } />
                     </Avatar>
                 </Button>
                 <div>
