@@ -7,22 +7,23 @@ import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 const CompaniesTable = () => {
-    // const { companies, searchCompanyByText } = useSelector(store => store.company);
-    // const [filterCompany, setFilterCompany] = useState(companies);
+    const { companies, searchCompanyByText } = useSelector(store => store.company);
+    const [filterCompany, setFilterCompany] = useState(companies);
     const navigate = useNavigate();
-    // useEffect(()=>{
-    //     const filteredCompany = companies.length >= 0 && companies.filter((company)=>{
-    //         if(!searchCompanyByText){
-    //             return true
-    //         };
-    //         return company?.name?.toLowerCase().includes(searchCompanyByText.toLowerCase());
 
-    //     });
-    //     setFilterCompany(filteredCompany);
-    // },[companies,searchCompanyByText])
+    useEffect(()=>{
+        const filteredCompany = companies?.length >= 0 && companies.filter((company)=>{
+            if(!searchCompanyByText){
+                return true
+            };
+            return company?.name?.toLowerCase().includes(searchCompanyByText.toLowerCase());
+
+        });
+        setFilterCompany(filteredCompany);
+    },[companies,searchCompanyByText])
     return (
         <div>
-            {/* <Table>
+            <Table>
                 <TableCaption>A list of your recent registered companies</TableCaption>
                 <TableHeader>
                     <TableRow>
@@ -34,11 +35,12 @@ const CompaniesTable = () => {
                 </TableHeader>
                 <TableBody>
                     {
-                        filterCompany?.map((company) => (
-                            <tr>
+                        
+                        filterCompany?.map((company,ind) => (
+                            <tr key = {ind}>
                                 <TableCell>
                                     <Avatar>
-                                        <AvatarImage src={company.logo}/>
+                                        <AvatarImage src={company.logo || "/altCompany.avif"}/>
                                     </Avatar>
                                 </TableCell>
                                 <TableCell>{company.name}</TableCell>
@@ -59,7 +61,7 @@ const CompaniesTable = () => {
                         ))
                     }
                 </TableBody>
-            </Table> */}
+            </Table>
         </div>
     )
 }

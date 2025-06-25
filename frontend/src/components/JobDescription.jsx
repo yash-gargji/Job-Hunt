@@ -11,12 +11,13 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { setSingleJob, setLoading } from "@/redux/jobSlice";
 import { toast } from "sonner";
-
 const fallbackLogo = "/altCompany.avif";
 
 const JobDescription = () => {
   const params = useParams();
   const jobId = params.id;
+  console.log(jobId);
+  
   const dispatch = useDispatch();
   const { user } = useSelector((store) => store.auth);
   const { singleJob, loading } = useSelector((store) => store.job);
@@ -48,7 +49,7 @@ const JobDescription = () => {
       toast.error(error.response?.data?.message || "Something went wrong");
     }
     finally{
-      setLoading(false);
+      dispatch(setLoading(false));
     }
   };
 
