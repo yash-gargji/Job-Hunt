@@ -41,43 +41,75 @@ function Navbar() {
         </div>
         <div className="flex items-center gap-12">
           <ul className="flex font-medium items-center gap-5">
-            <li>
-              <NavLink
-                to="/"
-                end
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-black font-bold transition-colors"
-                    : "text-gray-700 hover:text-black transition-colors"
-                }
-              >
-                Home
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/jobs"
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-black font-bold transition-colors"
-                    : "text-gray-700 hover:text-black transition-colors"
-                }
-              >
-                Jobs
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/browse"
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-black font-bold transition-colors"
-                    : "text-gray-700 hover:text-black transition-colors"
-                }
-              >
-                Browse
-              </NavLink>
-            </li>
+            {user && user.role === "recruiter" ? (
+              <>
+                <li>
+                  <NavLink
+                    to="/admin/companies"
+                    end
+                    className={({ isActive }) =>
+                      isActive
+                        ? "text-black font-bold transition-colors"
+                        : "text-gray-700 hover:text-black transition-colors"
+                    }
+                  >
+                    Companies
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/admin/jobs"
+                    className={({ isActive }) =>
+                      isActive
+                        ? "text-black font-bold transition-colors"
+                        : "text-gray-700 hover:text-black transition-colors"
+                    }
+                  >
+                    Jobs
+                  </NavLink>
+                </li>
+              </>
+            ) : (
+              <>
+                <li>
+                  <NavLink
+                    to="/"
+                    end
+                    className={({ isActive }) =>
+                      isActive
+                        ? "text-black font-bold transition-colors"
+                        : "text-gray-700 hover:text-black transition-colors"
+                    }
+                  >
+                    Home
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/jobs"
+                    className={({ isActive }) =>
+                      isActive
+                        ? "text-black font-bold transition-colors"
+                        : "text-gray-700 hover:text-black transition-colors"
+                    }
+                  >
+                    Jobs
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/browse"
+                    className={({ isActive }) =>
+                      isActive
+                        ? "text-black font-bold transition-colors"
+                        : "text-gray-700 hover:text-black transition-colors"
+                    }
+                  >
+                    Browse
+                  </NavLink>
+                </li>
+              </>
+            )}
           </ul>
           {!user ? (
             <div className="flex items-center gap-2">
@@ -113,18 +145,19 @@ function Navbar() {
                     <h4 className="font-bold text-xl text-gray-800">
                       {user?.fullname}
                     </h4>
-                    <p className="text-sm text-gray-500 italic">
-                      {user?.bio}
-                    </p>
+                    <p className="text-sm text-gray-500 italic">{user?.bio}</p>
                   </div>
                   <div className="flex flex-col gap-3 w-full">
-                    <Button
+                     {
+                       user && user.role == "student" ?  <Button
                       variant="outline"
                       className="flex items-center gap-3 text-base font-medium text-blue-700 hover:bg-blue-100 rounded-lg px-3 py-2 transition-all duration-200"
                     >
                       <User size={20} className="text-blue-500" />
                       <Link to="/profile">View Profile</Link>
-                    </Button>
+                    </Button> : 
+                      <></>
+                     }
                     <Button
                       onClick={logoutHandler}
                       variant="outline"

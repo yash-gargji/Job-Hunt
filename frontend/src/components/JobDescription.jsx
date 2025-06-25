@@ -28,6 +28,7 @@ const JobDescription = () => {
       toast.error("Login to apply");
       return;
     }
+    dispatch(setLoading(true));
     try {
       const res = await axios.get(
         `${APPLICATION_API_END_POINT}/apply/${jobId}`,
@@ -45,6 +46,9 @@ const JobDescription = () => {
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Something went wrong");
+    }
+    finally{
+      setLoading(false);
     }
   };
 
