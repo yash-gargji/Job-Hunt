@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { RadioGroup, RadioGroupItem } from './ui/radio-group'
 import { Label } from './ui/label'
 import { useDispatch } from 'react-redux'
-// import { setSearchedQuery } from '@/redux/jobSlice'
+ import { setSearchedQuery } from '@/redux/jobSlice'
 
 const fitlerData = [
     {
@@ -10,7 +10,7 @@ const fitlerData = [
         array: ["Delhi NCR", "Bangalore", "Hyderabad", "Pune", "Mumbai"]
     },
     {
-        fitlerType: "Industry",
+        fitlerType: "Role",
         array: ["Frontend Developer", "Backend Developer", "FullStack Developer"]
     },
     {
@@ -26,7 +26,7 @@ const FilterCard = () => {
         setSelectedValue(value);
     }
     useEffect(()=>{
-       // dispatch(setSearchedQuery(selectedValue));
+        dispatch(setSearchedQuery(selectedValue));
     },[selectedValue]);
     return (
         <div className='w-full bg-white p-3 rounded-md'>

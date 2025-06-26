@@ -1,15 +1,30 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "./shared/Navbar.jsx";
 import FilterCard from "./FilterCard.jsx";
 import Job from "./Job.jsx";
 import { motion } from 'framer-motion';
 import { useDispatch, useSelector } from "react-redux";
-import useGetAllJobs from "@/hooks/useGetAllJobs";  
-
+import useGetAllJobs from "@/hooks/useGetAllJobs.jsx";
 function Jobs() {
-    useGetAllJobs();  
+    useGetAllJobs();
     const dispatch = useDispatch();
-    const { loading, allJobs } = useSelector(store => store.job);
+    const { loading, allJobs ,searchedQuery} = useSelector(store => store.job);
+    const [filterJobs,setFilterJobs] = useState(allJobs);
+
+    useEffect(() => {
+       if(searchedQuery){
+          const filteredJobs = allJobs.filter((job) => {
+            return job.title.toLowerCase().includes(searchedQuery.toLowerCase()) ||
+                    job.description.toLowerCase().includes(searchedQuery.toLowerCase()) ||
+                     job.location.toLowerCase().includes(searchedQuery.toLowerCase())
+          })
+          setFilterJobs(filteredJobs)
+       }
+       else {
+          setFilterJobs(allJobs)
+       }
+    },[allJobs, searchedQuery]);
+
 
     return (
         <div>
@@ -24,13 +39,13 @@ function Jobs() {
                             <div className="flex justify-center items-center h-full">
                                 <span className="text-lg text-gray-400">Loading jobs...</span>
                             </div>
-                        ) : allJobs.length <= 0 ? (
+                        ) : filterJobs.length <= 0 ? (
                             <div className="flex justify-center items-center h-full">
                                 <span className="text-lg text-gray-400">Job not found</span>
                             </div>
                         ) : (
                             <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr'>
-                                {allJobs.map((job) => (
+                                {filterJobs.map((job) => (
                                     <motion.div
                                         initial={{ opacity: 0, x: 100 }}
                                         animate={{ opacity: 1, x: 0 }}

@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { SearchCode } from "lucide-react";
 
 const jobSlice = createSlice({
   name: "job",
@@ -8,6 +9,8 @@ const jobSlice = createSlice({
     singleJob: null,
     allAdminJobs: [],
     searchJobByText: "",
+    allAppliedJobs: [],
+    searchedQuery: "",
   },
   reducers: {
     setLoading: (state, action) => {
@@ -22,11 +25,25 @@ const jobSlice = createSlice({
     setSingleJob: (state, action) => {
       state.singleJob = action.payload;
     },
-    setSearchJobByText:  (state, action) => {
+    setSearchJobByText: (state, action) => {
       state.searchJobByText = action.payload;
+    },
+    setAllAppliedJobs: (state, action) => {
+      state.allAppliedJobs = action.payload;
+    },
+    setSearchedQuery: (state, action) => {
+      state.searchedQuery = action.payload;
     },
   },
 });
 
-export const { setAllJobs, setLoading, setSingleJob, setAllAdminJobs, setSearchJobByText} = jobSlice.actions;
+export const {
+  setAllJobs,
+  setLoading,
+  setSingleJob,
+  setAllAdminJobs,
+  setSearchJobByText,
+  setAllAppliedJobs,
+  setSearchedQuery
+} = jobSlice.actions;
 export default jobSlice.reducer;
