@@ -4,7 +4,6 @@ import jwt from "jsonwebtoken";
 import getDataUri from "../utils/dataUri.js";
 import cloudinary from "../utils/cloudinary.js";
 
-// Regular expressions
 const nameRegex = /^[a-zA-Z\s]+$/;
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const phoneRegex = /^\d{10}$/;
@@ -123,7 +122,7 @@ export const login = async (req, res) => {
     }
     if (role != user.role) {
       return res.status(400).json({
-        message: "account doesn't exist with current role,",
+        message: "account doesn't exist with current role",
         success: false,
       });
     }
@@ -247,6 +246,44 @@ export const updateProfile = async (req, res) => {
 
     return res.status(200).json({
       message: "profile updated successfully",
+      user,
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const updateProfilePicture = async (req, res) => {
+  try {
+    const file = req.file;
+    const userId = req.id; 
+    let user = await User.findById(userId);
+
+    if (!user) {
+      res.status(400).json({
+        message: "User not found",
+        success: false,
+      });
+    }
+    if(file){
+        const fileUri = getDataUri(file);
+        const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+        user.profile.profilePhoto = cloudResponse.secure_url;
+    }
+
+    await user.save();
+
+    user = {
+      _id: user._id,
+      fullname: user.fullname,
+      email: user.email,
+      phoneNumber: user.phoneNumber,
+      role: user.role,
+      profile: user.profile,
+    };
+
+    return res.status(200).json({
+      message: "profile pic updated successfully",
       user,
       success: true,
     });

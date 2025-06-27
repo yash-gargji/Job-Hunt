@@ -16,12 +16,11 @@ const fallbackLogo = "/altCompany.avif";
 const JobDescription = () => {
   const params = useParams();
   const jobId = params.id;
-  console.log(jobId);
-  
+
   const dispatch = useDispatch();
   const { user } = useSelector((store) => store.auth);
   const { singleJob, loading } = useSelector((store) => store.job);
-    
+
   const [isApplied, setIsApplied] = useState(false);
 
   const applyJobHandler = async () => {
@@ -47,8 +46,7 @@ const JobDescription = () => {
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Something went wrong");
-    }
-    finally{
+    } finally {
       dispatch(setLoading(false));
     }
   };
@@ -62,7 +60,6 @@ const JobDescription = () => {
         });
         if (res.data.success) {
           dispatch(setSingleJob(res.data.job));
-          
           setIsApplied(
             user
               ? res.data.job.applications.some(
@@ -70,9 +67,6 @@ const JobDescription = () => {
                 )
               : false
           );
-          console.log(res.data.job);
-          console.log(user);
-          
         }
       } catch (error) {
         console.log(error);
@@ -108,17 +102,28 @@ const JobDescription = () => {
             {singleJob?.title}
           </h1>
           <div className="flex flex-wrap gap-2 mt-2">
-            <Badge className="bg-blue-100 text-blue-700 font-semibold px-3 py-1 rounded-full" variant="ghost">
-              {singleJob?.position } {" "}
-              Position
+            <Badge
+              className="bg-blue-100 text-blue-700 font-semibold px-3 py-1 rounded-full"
+              variant="ghost"
+            >
+              {singleJob?.position} Position
             </Badge>
-            <Badge className="bg-red-100 text-[#F83002] font-semibold px-3 py-1 rounded-full" variant="ghost">
+            <Badge
+              className="bg-red-100 text-[#F83002] font-semibold px-3 py-1 rounded-full"
+              variant="ghost"
+            >
               {singleJob?.jobType}
             </Badge>
-            <Badge className="bg-purple-100 text-[#7209b7] font-semibold px-3 py-1 rounded-full" variant="ghost">
+            <Badge
+              className="bg-purple-100 text-[#7209b7] font-semibold px-3 py-1 rounded-full"
+              variant="ghost"
+            >
               {singleJob?.salary} LPA
             </Badge>
-            <Badge className="bg-gray-100 text-gray-700 font-semibold px-3 py-1 rounded-full" variant="ghost">
+            <Badge
+              className="bg-gray-100 text-gray-700 font-semibold px-3 py-1 rounded-full"
+              variant="ghost"
+            >
               {singleJob?.location}
             </Badge>
           </div>
@@ -168,27 +173,39 @@ const JobDescription = () => {
         <h2 className="text-2xl font-bold mb-6 border-b pb-3 text-sky-700">
           Job Details
         </h2>
-        <div className="grid gap-5 md:grid-cols-2 text-gray-800">
+        <div className="grid gap-6 md:grid-cols-2 text-gray-800">
           <div>
-            <span className="block text-sm font-semibold text-gray-500">
+            <span className="block text-base font-semibold text-blue-700 mb-1">
               Role
             </span>
             <span className="text-lg">{singleJob?.title}</span>
           </div>
           <div>
-            <span className="block text-sm font-semibold text-gray-500">
+            <span className="block text-base font-semibold text-blue-700 mb-1">
               Location
             </span>
             <span className="text-lg">{singleJob?.location}</span>
           </div>
           <div className="md:col-span-2">
-            <span className="block text-sm font-semibold text-gray-500">
+            <span className="block text-base font-semibold text-blue-700 mb-1">
               Description
             </span>
             <span className="text-lg">{singleJob?.description}</span>
           </div>
+          {singleJob?.requirements && singleJob.requirements.length > 0 && (
+            <div className="md:col-span-2">
+              <span className="block text-base font-semibold text-blue-700 mb-1">
+                Requirements
+              </span>
+              <ul className="list-disc list-inside text-lg mt-1">
+                {singleJob.requirements.map((req, idx) =>
+                  req.length > 0 ? <li key={idx}>{req}.</li> : null
+                )}
+              </ul>
+            </div>
+          )}
           <div>
-            <span className="block text-sm font-semibold text-gray-500">
+            <span className="block text-base font-semibold text-blue-700 mb-1">
               Experience
             </span>
             <span className="text-lg">
@@ -196,19 +213,19 @@ const JobDescription = () => {
             </span>
           </div>
           <div>
-            <span className="block text-sm font-semibold text-gray-500">
+            <span className="block text-base font-semibold text-blue-700 mb-1">
               Salary
             </span>
             <span className="text-lg">{singleJob?.salary} LPA</span>
           </div>
           <div>
-            <span className="block text-sm font-semibold text-gray-500">
+            <span className="block text-base font-semibold text-blue-700 mb-1">
               Total Applicants
             </span>
             <span className="text-lg">{singleJob?.applications?.length}</span>
           </div>
           <div>
-            <span className="block text-sm font-semibold text-gray-500">
+            <span className="block text-base font-semibold text-blue-700 mb-1">
               Posted Date
             </span>
             <span className="text-lg">

@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { USER_API_END_POINT } from "@/utils/constants";
 import { setUser } from "@/redux/authSlice";
+import { toast } from "sonner";
 
 function Navbar() {
   const user = useSelector((store) => store.auth.user);
@@ -33,11 +34,14 @@ function Navbar() {
   return (
     <div className="bg-white">
       <div className="flex items-center justify-between mx-auto max-w-7xl h-16">
-        <div>
-          <h1 className="text-2xl font-bold">
-            <span className="text-slate-800">Job</span>
-            <span className="text-sky-500">Portal</span>
-          </h1>
+        <div className="flex items-center">
+          <Link to="/">
+            <img
+              src="/jobNestle.png"
+              alt="JobNestle Logo"
+              className="h-12 w-auto object-contain"
+            />
+          </Link>
         </div>
         <div className="flex items-center gap-12">
           <ul className="flex font-medium items-center gap-5">
@@ -145,19 +149,18 @@ function Navbar() {
                     <h4 className="font-bold text-xl text-gray-800">
                       {user?.fullname}
                     </h4>
-                    <p className="text-sm text-gray-500 italic">{user?.bio}</p>
+                    <p className="text-sm text-gray-500 italic">{user?.profile?.bio}</p>
                   </div>
                   <div className="flex flex-col gap-3 w-full">
-                     {
-                       user && user.role == "student" ?  <Button
-                      variant="outline"
-                      className="flex items-center gap-3 text-base font-medium text-blue-700 hover:bg-blue-100 rounded-lg px-3 py-2 transition-all duration-200"
-                    >
-                      <User size={20} className="text-blue-500" />
-                      <Link to="/profile">View Profile</Link>
-                    </Button> : 
-                      <></>
-                     }
+                    {user && user.role === "student" ? (
+                      <Button
+                        variant="outline"
+                        className="flex items-center gap-3 text-base font-medium text-blue-700 hover:bg-blue-100 rounded-lg px-3 py-2 transition-all duration-200"
+                      >
+                        <User size={20} className="text-blue-500" />
+                        <Link to="/profile">View Profile</Link>
+                      </Button>
+                    ) : null}
                     <Button
                       onClick={logoutHandler}
                       variant="outline"

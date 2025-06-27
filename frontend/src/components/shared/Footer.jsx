@@ -5,15 +5,13 @@ const Footer = () => {
     <footer className="border-t border-gray-200 bg-white py-8 mt-12">
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row md:justify-between md:items-center">
-          {/* Branding */}
           <div className="mb-6 md:mb-0">
-            <h2 className="text-xl font-semibold text-gray-900">JobPortal</h2>
+            <h2 className="text-xl font-semibold text-gray-900">JobNestle</h2>
             <p className="text-sm text-gray-500 mt-1">
-              © {new Date().getFullYear()} JobPortal. All rights reserved.
+              © {new Date().getFullYear()} JobNestle. All rights reserved.
             </p>
           </div>
 
-          {/* Social Media */}
           <div className="flex space-x-4">
             <a href="https://facebook.com" aria-label="Facebook" className="text-gray-500 hover:text-gray-700 transition" target="_blank" rel="noopener noreferrer">
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M22.676 0H1.324C.593 0 0 .592 0 1.324v21.352C0 23.408.593 24 1.324 24H12.82V14.706H9.692v-3.578h3.128V8.408c0-3.1 1.893-4.787 4.657-4.787 1.325 0 2.463.1 2.794.144v3.238l-1.918.001c-1.503 0-1.794.715-1.794 1.762v2.31h3.587l-.468 3.578h-3.119V24h6.116C23.407 24 24 23.408 24 22.676V1.324C24 .592 23.407 0 22.676 0z" /></svg>

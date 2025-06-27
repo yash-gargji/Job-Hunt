@@ -9,7 +9,7 @@ const LatestJobs = () => {
             <h1 className="text-4xl font-bold">
                 <span className="text-sky-500">Latest & Top </span> Job Openings
             </h1>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 my-5 min-h-[180px]">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-20 my-5 min-h-[180px]">
                 {loading ? (
                     <span className="col-span-full text-center text-gray-400 text-lg">Loading jobs...</span>
                 ) : allJobs.length <= 0 ? (

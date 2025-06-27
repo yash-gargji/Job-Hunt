@@ -3,29 +3,32 @@ import Navbar from "./shared/Navbar.jsx";
 import FilterCard from "./FilterCard.jsx";
 import Job from "./Job.jsx";
 import { motion } from 'framer-motion';
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import useGetAllJobs from "@/hooks/useGetAllJobs.jsx";
-import { setSearchedQuery } from "@/redux/jobSlice.js";
+
 function Jobs() {
     useGetAllJobs();
-    const dispatch = useDispatch();
-    const { loading, allJobs ,searchedQuery} = useSelector(store => store.job);
-    const [filterJobs,setFilterJobs] = useState(allJobs);
+    const { loading, allJobs } = useSelector(store => store.job);
+    const [filterJobs, setFilterJobs] = useState(allJobs);
+    const [search, setSearch] = useState("");
 
-    useEffect(() => {
-       if(searchedQuery){
-          const filteredJobs = allJobs.filter((job) => {
-            return  job.title.toLowerCase().includes(searchedQuery.toLowerCase()) ||
-                    job.description.toLowerCase().includes(searchedQuery.toLowerCase()) ||
-                    job.location.toLowerCase().includes(searchedQuery.toLowerCase())
-          })
-          setFilterJobs(filteredJobs)
-       }
-       else {
-          setFilterJobs(allJobs)
-       }
-    },[allJobs, searchedQuery]);
-
+   useEffect(() => {
+    if (search) {
+        const filteredJobs = allJobs.filter((job) => {
+            return (
+                job.title.toLowerCase().includes(search.toLowerCase()) ||
+                job.description.toLowerCase().includes(search.toLowerCase()) ||
+                job.location.toLowerCase().includes(search.toLowerCase()) || 
+                (job?.requirements && job.requirements.some(req => 
+                    req.toLowerCase().includes(search.toLowerCase())
+                ))
+            );
+        });
+        setFilterJobs(filteredJobs);
+    } else {
+        setFilterJobs(allJobs);
+    }
+}, [allJobs, search]);
 
     return (
         <div>
@@ -33,7 +36,7 @@ function Jobs() {
             <div className='max-w-7xl mx-auto mt-5'>
                 <div className='flex gap-5'>
                     <div className='w-[20%]'>
-                        <FilterCard />
+                        <FilterCard search={search} setSearch={setSearch} />
                     </div>
                     <div className='flex-1 h-[88vh] overflow-y-auto pb-5'>
                         {loading ? (
@@ -42,7 +45,7 @@ function Jobs() {
                             </div>
                         ) : filterJobs.length <= 0 ? (
                             <div className="flex justify-center items-center h-full">
-                                <span className="text-lg text-gray-400">Job not found</span>
+                                <span className="text-lg text-gray-400">No Jobs</span>
                             </div>
                         ) : (
                             <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr'>
