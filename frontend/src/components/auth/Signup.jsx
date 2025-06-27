@@ -1,17 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../shared/Navbar.jsx";
 import { Label } from "../ui/label.jsx";
 import { Input } from "../ui/input.jsx";
 import { RadioGroup } from "../ui/radio-group.jsx";
 import { Button } from "../ui/button.jsx";
 import { Link, useNavigate } from "react-router-dom";
-import { FiUser, FiMail, FiPhone, FiLock, FiImage } from "react-icons/fi";
+import { FiUser, FiMail, FiPhone, FiLock, FiImage, FiEye, FiEyeOff } from "react-icons/fi";
 import axios from "axios";
 import { USER_API_END_POINT } from "@/utils/constants.js";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "@/redux/authSlice.js";
+
+const nameRegex = /^[a-zA-Z\s]+$/;
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const phoneRegex = /^\d{10}$/;
+const passwordRegex = /^.{6,}$/;
+const roleRegex = /^(student|recruiter)$/;
 
 function Signup() {
   const [input, setInput] = useState({
@@ -22,7 +28,8 @@ function Signup() {
     role: "",
     file: "",
   });
-  const {loading} = useSelector(store => store.auth);
+  const [showPassword, setShowPassword] = useState(false);
+  const { loading, user } = useSelector((store) => store.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -36,6 +43,48 @@ function Signup() {
 
   const submitHandler = async (e) => {
     e.preventDefault();
+
+    if (!input.fullname) {
+      toast.error("Full name is required");
+      return;
+    }
+    if (!nameRegex.test(input.fullname)) {
+      toast.error("Name should only contain letters and spaces");
+      return;
+    }
+    if (!input.email) {
+      toast.error("Email is required");
+      return;
+    }
+    if (!emailRegex.test(input.email)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+    if (!input.phoneNumber) {
+      toast.error("Phone number is required");
+      return;
+    }
+    if (!phoneRegex.test(input.phoneNumber)) {
+      toast.error("Phone number must be 10 digits");
+      return;
+    }
+    if (!input.password) {
+      toast.error("Password is required");
+      return;
+    }
+    if (!passwordRegex.test(input.password)) {
+      toast.error("Password must be at least 6 characters");
+      return;
+    }
+    if (!input.role) {
+      toast.error("Role is required");
+      return;
+    }
+    if (!roleRegex.test(input.role)) {
+      toast.error("Role must be either student or recruiter");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("fullname", input.fullname);
     formData.append("email", input.email);
@@ -46,7 +95,7 @@ function Signup() {
       formData.append("file", input.file);
     }
     try {
-       dispatch(setLoading(true));
+      dispatch(setLoading(true));
       const res = await axios.post(`${USER_API_END_POINT}/register`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -58,22 +107,25 @@ function Signup() {
         navigate("/login");
       }
     } catch (error) {
-      console.log(error);
       if (
         error.response &&
         error.response.data &&
         error.response.data.message
       ) {
-        console.log(error.response.data.errors)
         toast.error(error.response.data.message);
       } else {
         toast.error("An unexpected error occurred.");
       }
-    }
-    finally{
+    } finally {
       dispatch(setLoading(false));
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-blue-100 to-purple-200 flex flex-col">
@@ -127,13 +179,22 @@ function Signup() {
           <div className="relative">
             <FiLock className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400" />
             <Input
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="Password"
-              className="w-full pl-10 pr-3 py-2 rounded-xl border border-gray-200 bg-gray-50 focus:ring-2 focus:ring-indigo-300 transition"
+              className="w-full pl-10 pr-10 py-2 rounded-xl border border-gray-200 bg-gray-50 focus:ring-2 focus:ring-indigo-300 transition"
               name="password"
               value={input.password}
               onChange={changeEventHandler}
             />
+            <button
+              type="button"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-indigo-400 focus:outline-none"
+              onClick={() => setShowPassword((prev) => !prev)}
+              tabIndex={-1}
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? <FiEyeOff /> : <FiEye />}
+            </button>
           </div>
           <div>
             <Label className="block mb-1 text-sm text-gray-700 font-semibold">
@@ -175,8 +236,7 @@ function Signup() {
           </div>
           {loading ? (
             <Button className="w-full my-4">
-              {" "}
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait{" "}
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
             </Button>
           ) : (
             <Button type="submit" className="w-full my-4">

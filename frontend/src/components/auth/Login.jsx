@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../shared/Navbar.jsx";
 import { Label } from "../ui/label.jsx";
 import { Input } from "../ui/input.jsx";
@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import axios from "axios";
 import { USER_API_END_POINT } from "@/utils/constants.js";
 import { useDispatch, useSelector } from "react-redux";
-import { setLoading ,setUser} from "@/redux/authSlice.js";
+import { setLoading, setUser } from "@/redux/authSlice.js";
 import { Loader2 } from "lucide-react";
 
 function Login() {
@@ -19,7 +19,7 @@ function Login() {
     password: "",
     role: "",
   });
-  const { loading} = useSelector((store) => store.auth);
+  const { loading, user } = useSelector((store) => store.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -39,7 +39,7 @@ function Login() {
         withCredentials: true,
       });
       if (res.data.success) {
-        dispatch(setUser(res.data.user))
+        dispatch(setUser(res.data.user));
         navigate("/");
         toast.success(res.data.message);
       }
@@ -58,6 +58,12 @@ function Login() {
       dispatch(setLoading(false));
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-blue-100 to-purple-200 flex flex-col">

@@ -5,6 +5,7 @@ import Job from "./Job.jsx";
 import { motion } from 'framer-motion';
 import { useDispatch, useSelector } from "react-redux";
 import useGetAllJobs from "@/hooks/useGetAllJobs.jsx";
+import { setSearchedQuery } from "@/redux/jobSlice.js";
 function Jobs() {
     useGetAllJobs();
     const dispatch = useDispatch();
@@ -14,9 +15,9 @@ function Jobs() {
     useEffect(() => {
        if(searchedQuery){
           const filteredJobs = allJobs.filter((job) => {
-            return job.title.toLowerCase().includes(searchedQuery.toLowerCase()) ||
+            return  job.title.toLowerCase().includes(searchedQuery.toLowerCase()) ||
                     job.description.toLowerCase().includes(searchedQuery.toLowerCase()) ||
-                     job.location.toLowerCase().includes(searchedQuery.toLowerCase())
+                    job.location.toLowerCase().includes(searchedQuery.toLowerCase())
           })
           setFilterJobs(filteredJobs)
        }
