@@ -14,6 +14,7 @@ import AdminJobs from "./components/admin/AdminJobs.jsx"
 import PostJob from "./components/admin/PostJob.jsx"
 import Applicants from "./components/admin/Applicants.jsx"
 import ProtectedRoute from "./components/admin/ProtectedRoute.jsx"
+import MyJobs from "./components/MyJobs.jsx"
 
 const appRouter  = createBrowserRouter([
   {
@@ -43,6 +44,10 @@ const appRouter  = createBrowserRouter([
   {
    path: '/description/:id',
    element:<JobDescription/>
+  },
+  {
+   path: '/archive',
+   element: <MyJobs/>
   },
   // admin routes start from here 
    {

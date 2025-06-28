@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from '../shared/Navbar'
 import { Input } from '../ui/input'
-import { Button } from '../ui/button' 
-import { useNavigate } from 'react-router-dom' 
-import { useDispatch, useSelector } from 'react-redux' 
+import { Button } from '../ui/button'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import AdminJobsTable from './AdminJobsTable'
 import useGetAllAdminJobs from '@/hooks/useGetAllAdminJobs'
 import { setSearchJobByText } from '@/redux/jobSlice'
@@ -17,7 +17,7 @@ const AdminJobs = () => {
 
   useEffect(() => {
     dispatch(setSearchJobByText(input));
-  }, [input]);
+  }, [input, loading]);
 
   return (
     <div className="min-h-screen bg-gray-50">

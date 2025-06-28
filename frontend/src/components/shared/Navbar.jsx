@@ -112,6 +112,18 @@ function Navbar() {
                     Browse
                   </NavLink>
                 </li>
+                <li>
+                  <NavLink
+                    to="/archive"
+                    className={({ isActive }) =>
+                      isActive
+                        ? "text-black font-bold transition-colors"
+                        : "text-gray-700 hover:text-black transition-colors"
+                    }
+                  >
+                    Archive
+                  </NavLink>
+                </li>
               </>
             )}
           </ul>

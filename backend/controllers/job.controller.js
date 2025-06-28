@@ -1,7 +1,17 @@
 import { Job } from "../models/job.model.js";
+import { Application } from "../models/application.model.js";
+import { User } from "../models/user.model.js";
 // used by admin for psoting the job
 export const postJob = async (req, res) => {
   try {
+     const user = User.findById(req.id);
+
+    if(!user || user.role == "student"){
+       return res.status(400).json({
+         success: false,
+         message: "You are not authenticated to do this."
+       })
+    }
     const {
       title,
       description,
@@ -90,11 +100,14 @@ export const getAllJobs = async (req, res) => {
 export const getJobById = async (req, res) => {
   try {
     const jobId = req.params.id;
-    const job = await Job.findById(jobId).populate({
+    
+    const job = await Job.findById(jobId)
+      .populate({
         path: "company",
-      }).populate({
-         path: "applications",
       })
+      .populate({
+        path: "applications",
+      });
 
     if (!job) {
       return res.status(404).json({
@@ -113,11 +126,18 @@ export const getJobById = async (req, res) => {
 // for admin
 export const getAdminJobs = async (req, res) => {
   try {
+     const user = User.findById(req.id);
+
+    if(!user || user.role == "student"){
+       return res.status(400).json({
+         success: false,
+         message: "You are not authenticated to do this."
+       })
+    }
     const adminId = req.id;
-    const jobs = await Job.find({ created_by: adminId })
-    .populate({
-      path: "company"
-    })
+    const jobs = await Job.find({ created_by: adminId }).populate({
+      path: "company",
+    });
 
     if (!jobs) {
       return res.status(404).json({
@@ -130,6 +150,32 @@ export const getAdminJobs = async (req, res) => {
       jobs,
       success: true,
     });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deleteJobAndApplications = async (req,res) => {
+  try {
+    const jobId = req.params.id;
+    const user = User.findById(req.id);
+
+    if(!user || user.role == "student"){
+       return res.status(400).json({
+         success: false,
+         message: "You are not authenticated to do this."
+       })
+    }
+   
+    await Application.deleteMany({ job: jobId });
+
+    const deletedJob = await Job.findByIdAndDelete(jobId);
+
+    return res.status(200).json({
+      deletedJob,
+      message: "Job deleted successfully",
+      success: true
+    })
   } catch (error) {
     console.log(error);
   }

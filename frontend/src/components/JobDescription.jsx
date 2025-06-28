@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import {
   APPLICATION_API_END_POINT,
@@ -11,17 +11,20 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { setSingleJob, setLoading } from "@/redux/jobSlice";
 import { toast } from "sonner";
+
 const fallbackLogo = "/altCompany.avif";
 
 const JobDescription = () => {
   const params = useParams();
   const jobId = params.id;
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
   const { user } = useSelector((store) => store.auth);
   const { singleJob, loading } = useSelector((store) => store.job);
 
   const [isApplied, setIsApplied] = useState(false);
+  const [jobNotFound, setJobNotFound] = useState(false);
 
   const applyJobHandler = async () => {
     if (!user) {
@@ -69,13 +72,24 @@ const JobDescription = () => {
           );
         }
       } catch (error) {
-        console.log(error);
+        toast.error("Job not found.");
+        let savedJobs = JSON.parse(localStorage.getItem("savedJobs")) || [];
+        savedJobs = savedJobs.filter((saved) => saved._id !== jobId);
+        localStorage.setItem("savedJobs", JSON.stringify(savedJobs));
+        dispatch(setSingleJob(null));
+        setJobNotFound(true);
       } finally {
         dispatch(setLoading(false));
       }
     };
     fetchSingleJob();
   }, [jobId, dispatch, user?._id]);
+
+  useEffect(() => {
+    if (jobNotFound) {
+      navigate("/");
+    }
+  }, [jobNotFound, navigate]);
 
   return (
     <div className="max-w-4xl mx-auto my-12 px-4">
@@ -168,7 +182,6 @@ const JobDescription = () => {
           </Button>
         </div>
       </div>
-
       <section className="bg-white rounded-2xl shadow p-8">
         <h2 className="text-2xl font-bold mb-6 border-b pb-3 text-sky-700">
           Job Details
