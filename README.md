@@ -73,7 +73,8 @@
 
 #### Clone the repository
 
-``` git clone https://github.com/yash-gargji/JobNestle.git
+``` 
+git clone https://github.com/yash-gargji/JobNestle.git
 cd JobNestle 
 ```
 
