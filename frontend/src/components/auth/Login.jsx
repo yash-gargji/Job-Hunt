@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../shared/Navbar.jsx";
 import { Label } from "../ui/label.jsx";
 import { Input } from "../ui/input.jsx";
-import { RadioGroup } from "../ui/radio-group.jsx";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group.jsx";
 import { Button } from "../ui/button.jsx";
 import { Link, useNavigate } from "react-router-dom";
 import { FiMail, FiLock } from "react-icons/fi";
@@ -107,35 +107,30 @@ function Login() {
             <Label className="block mb-1 text-sm text-gray-700 font-semibold">
               Role
             </Label>
-            <RadioGroup className="flex gap-6">
+            <RadioGroup
+              value={input.role}
+              onValueChange={(value) =>
+                setInput((prev) => ({ ...prev, role: value }))
+              }
+              className="flex gap-6"
+            >
               <div className="flex items-center space-x-2">
-                <Input
-                  type="radio"
-                  name="role"
-                  value="student"
-                  className="accent-indigo-600"
-                  checked={input.role === "student"}
-                  onChange={changeEventHandler}
-                />
-                <Label className="text-gray-600 text-sm">Student</Label>
+                <RadioGroupItem value="student" id="student" />
+                <Label htmlFor="student" className="text-gray-600 text-sm">
+                  Student
+                </Label>
               </div>
               <div className="flex items-center space-x-2">
-                <Input
-                  type="radio"
-                  name="role"
-                  value="recruiter"
-                  className="accent-indigo-600"
-                  checked={input.role === "recruiter"}
-                  onChange={changeEventHandler}
-                />
-                <Label className="text-gray-600 text-sm">Recruiter</Label>
+                <RadioGroupItem value="recruiter" id="recruiter" />
+                <Label htmlFor="recruiter" className="text-gray-600 text-sm">
+                  Recruiter
+                </Label>
               </div>
             </RadioGroup>
           </div>
           {loading ? (
             <Button className="w-full my-4">
-              {" "}
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait{" "}
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
             </Button>
           ) : (
             <Button type="submit" className="w-full my-4">
