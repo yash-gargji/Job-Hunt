@@ -75,3 +75,10 @@
 ```bash
 git clone https://github.com/yash-gargji/JobNestle.git
 cd JobNestle
+
+
+---
+
+**⭐ If you like this project, please [star the repository](https://github.com/yash-gargji/JobNestle)!**  
+_Made with ❤️ by Yash Garg_
+
