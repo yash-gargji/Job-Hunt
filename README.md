@@ -8,7 +8,7 @@
 
 ### 🔐 Authentication & Authorization
 - Secure user registration and login  
-- Role-based access control (Job Seekers, Recruiters, Admin)  
+- Role-based access control (Job Seekers, Recruiters)  
 - JWT-based authentication  
 - Protected routes and middleware  
 
