@@ -72,10 +72,10 @@ export const register = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     let profilePhoto = "";
 
-    if(file){
-        const fileUri = getDataUri(file);
-        const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
-        profilePhoto = cloudResponse.secure_url;
+    if (file) {
+      const fileUri = getDataUri(file);
+      const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+      profilePhoto = cloudResponse.secure_url;
     }
 
     await User.create({
@@ -85,8 +85,8 @@ export const register = async (req, res) => {
       password: hashedPassword,
       role,
       profile: {
-         profilePhoto: profilePhoto,
-      }
+        profilePhoto: profilePhoto,
+      },
     });
     return res.status(201).json({
       message: "Account created successfully.",
@@ -148,7 +148,8 @@ export const login = async (req, res) => {
       .cookie("token", token, {
         maxAge: 1 * 24 * 60 * 60 * 1000,
         httpOnly: true,
-        sameSite: "strict",
+        sameSite: "None",
+        secure: true,
       })
       .json({
         message: `Welcome back ${user.fullname}`,
@@ -209,9 +210,8 @@ export const updateProfile = async (req, res) => {
       });
     let skillsArray = [];
     if (skills) skillsArray = skills.split(",");
-    
 
-    const userId = req.id; 
+    const userId = req.id;
     let user = await User.findById(userId);
 
     if (!user) {
@@ -220,11 +220,11 @@ export const updateProfile = async (req, res) => {
         success: false,
       });
     }
-    if(file){
-        const fileUri = getDataUri(file);
-        const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
-        user.profile.resume = cloudResponse.secure_url;
-        user.profile.resumeOriginalName = file.originalname;
+    if (file) {
+      const fileUri = getDataUri(file);
+      const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+      user.profile.resume = cloudResponse.secure_url;
+      user.profile.resumeOriginalName = file.originalname;
     }
 
     user.fullname = fullname;
@@ -256,7 +256,7 @@ export const updateProfile = async (req, res) => {
 export const updateProfilePicture = async (req, res) => {
   try {
     const file = req.file;
-    const userId = req.id; 
+    const userId = req.id;
     let user = await User.findById(userId);
 
     if (!user) {
@@ -265,10 +265,10 @@ export const updateProfilePicture = async (req, res) => {
         success: false,
       });
     }
-    if(file){
-        const fileUri = getDataUri(file);
-        const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
-        user.profile.profilePhoto = cloudResponse.secure_url;
+    if (file) {
+      const fileUri = getDataUri(file);
+      const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+      user.profile.profilePhoto = cloudResponse.secure_url;
     }
 
     await user.save();
