@@ -15,10 +15,7 @@ function useGetCompanyByid(companyId) {
         });
         if(res.data.success){
            dispatch(setSingleCompany(res.data.company));
-           console.log(res.data.success);
-           
         }
-
       } catch (error) {
         console.log(error);
       }
