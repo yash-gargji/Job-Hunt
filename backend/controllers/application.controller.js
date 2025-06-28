@@ -19,7 +19,7 @@ export const applyJob = async (req, res) => {
     });
     if (existingApplication) {
       return res.status(400).json({
-        message: "already applied",
+        message: "Already applied",
         success: false,
       });
     }
@@ -28,7 +28,7 @@ export const applyJob = async (req, res) => {
     const job = await Job.findById(JobId);
     if (!job) {
       return res.status(404).json({
-        message: "job not found",
+        message: "Job not found",
         success: false,
       });
     }
@@ -112,7 +112,7 @@ export const updateStatus = async(req,res) =>{
         const applicationId = req.params.id;
         if(!status){
             return res.status(400),json({
-               message: "status is required",
+               message: "Status is required",
                success:false
             })
         }
@@ -120,7 +120,7 @@ export const updateStatus = async(req,res) =>{
 
         if(!application){
            return res.status(404).json({
-             message: "application not found",
+             message: "Application not found",
              success: false
            })
         }
@@ -130,7 +130,7 @@ export const updateStatus = async(req,res) =>{
         await application.save();
         
         return res.status(200).json({
-           message: "status updated successfully",
+           message: "Status updated successfully",
            success: true
         })
     } catch (error) {

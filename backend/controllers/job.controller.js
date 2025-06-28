@@ -56,7 +56,7 @@ export const postJob = async (req, res) => {
     });
 
     return res.status(201).json({
-      message: "new job created successfully",
+      message: "New job created successfully",
       job,
       success: true,
     });
@@ -141,7 +141,7 @@ export const getAdminJobs = async (req, res) => {
 
     if (!jobs) {
       return res.status(404).json({
-        message: "jobs not found",
+        message: "Jobs not found",
         success: false,
       });
     }

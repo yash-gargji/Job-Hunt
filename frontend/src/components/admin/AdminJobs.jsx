@@ -33,7 +33,7 @@ const AdminJobs = () => {
             className="w-full sm:w-auto"
             onClick={() => navigate("/admin/jobs/create")}
           >
-            New Jobs
+            New Job
           </Button>
         </div>
         <div className="bg-white rounded-lg shadow p-6 min-h-[200px]">

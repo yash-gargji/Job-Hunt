@@ -122,7 +122,7 @@ export const login = async (req, res) => {
     }
     if (role != user.role) {
       return res.status(400).json({
-        message: "account doesn't exist with current role",
+        message: "Account doesn't exist with current role",
         success: false,
       });
     }
@@ -163,7 +163,7 @@ export const login = async (req, res) => {
 export const logout = async (req, res) => {
   try {
     return res.status(200).cookie("token", "", { maxAge: 0 }).json({
-      message: "logged out successfully",
+      message: "Logged out successfully",
       success: true,
     });
   } catch (error) {
@@ -245,7 +245,7 @@ export const updateProfile = async (req, res) => {
     };
 
     return res.status(200).json({
-      message: "profile updated successfully",
+      message: "Profile updated successfully",
       user,
       success: true,
     });
@@ -283,7 +283,7 @@ export const updateProfilePicture = async (req, res) => {
     };
 
     return res.status(200).json({
-      message: "profile pic updated successfully",
+      message: "Profile pic updated successfully",
       user,
       success: true,
     });

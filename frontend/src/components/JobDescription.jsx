@@ -212,7 +212,13 @@ const JobDescription = () => {
               </span>
               <ul className="list-disc list-inside text-lg mt-1">
                 {singleJob.requirements.map((req, idx) =>
-                  req.length > 0 ? <li key={idx}>{req}.</li> : null
+                  req.length > 0 ? (
+                    <li key={idx}>
+                      <span style={{ position: "relative", left: "-0.3em" }}>
+                        {req}.
+                      </span>
+                    </li>
+                  ) : null
                 )}
               </ul>
             </div>
@@ -222,7 +228,10 @@ const JobDescription = () => {
               Experience
             </span>
             <span className="text-lg">
-              {singleJob?.experience == null ? 0 : singleJob?.experience} yrs
+              {singleJob?.experienceLevel == null
+                ? 0
+                : singleJob?.experienceLevel}{" "}
+              yrs
             </span>
           </div>
           <div>
