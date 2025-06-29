@@ -5,9 +5,11 @@ import { useSelector } from 'react-redux'
 import useGetAppliedJobs from '@/hooks/useGetAppliedJobs'
 import { XCircle } from 'lucide-react'
 import { Button } from './ui/button'
+import { useNavigate } from 'react-router-dom'
 
 function MyJobs() {
   const { user } = useSelector(store => store.auth);
+  const navigate = useNavigate();
   if(user){
       useGetAppliedJobs();
   }
@@ -93,7 +95,7 @@ function MyJobs() {
                     Posted on {job.createdAt ? job.createdAt.split("T")[0] : ""}
                   </span>
                   <Button
-                    onClick={() => window.location.href = `/description/${job._id}`}
+                    onClick={() => navigate(`/description/${job._id}`)}
                     className="mt-4 bg-green-100 text-green-700 hover:bg-green-200 border border-green-200 font-semibold"
                   >
                     Apply
